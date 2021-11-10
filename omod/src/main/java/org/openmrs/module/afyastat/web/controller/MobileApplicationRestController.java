@@ -2,6 +2,9 @@ package org.openmrs.module.afyastat.web.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.afyastat.api.ModelService;
+import org.openmrs.module.afyastat.domain.ModelInputFields;
+import org.openmrs.module.afyastat.domain.ScoringResult;
 import org.openmrs.module.afyastat.util.MedicDataExchange;
 import org.openmrs.module.afyastat.util.Utils;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -172,5 +175,22 @@ public class MobileApplicationRestController extends BaseRestController {
 			
 		}
 		return new SimpleObject().add("Report", "The request could not be interpreted properly");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/casefindingscore")
+	@ResponseBody
+	public Object processModel(HttpServletRequest request) {
+		ModelService modelService = new ModelService();
+		String requestBody = null;
+		try {
+			requestBody = Utils.fetchRequestBody(request.getReader());
+			ModelInputFields inputFields = Utils.extractVariablesFromRequestBody(requestBody);
+			ScoringResult scoringResult = modelService.score("1", inputFields);
+			return scoringResult;
+		}
+		catch (IOException e) {
+			return new SimpleObject().add("ServerResponse", "Error extracting request body");
+		}
+		
 	}
 }

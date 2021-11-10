@@ -1,17 +1,24 @@
 package org.openmrs.module.afyastat.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ObjectNode;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.afyastat.api.service.InfoService;
+import org.openmrs.module.afyastat.domain.ModelInputFields;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Utils {
 	
@@ -120,5 +127,29 @@ public class Utils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static ModelInputFields extractVariablesFromRequestBody(String requestBodyString) {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode tree = null;
+		Map<String, Object> modelParams = new HashMap<String, Object>();
+		try {
+			tree = (ObjectNode) mapper.readTree(requestBodyString);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Iterator<Map.Entry<String, JsonNode>> it = tree.getFields();
+		while (it.hasNext()) {
+			Map.Entry<String, JsonNode> field = it.next();
+			String keyId = field.getKey();
+			String keyValue = field.getValue().getTextValue();
+			modelParams.put(keyId, keyValue);
+		}
+		
+		ModelInputFields inputFields = new ModelInputFields();
+		inputFields.setFields(modelParams);
+		return inputFields;
 	}
 }

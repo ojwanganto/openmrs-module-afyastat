@@ -52,6 +52,9 @@
 		<jsonPathVersion>0.8.1</jsonPathVersion>
 		<apacheHttpClientVersion>4.5.10</apacheHttpClientVersion>
 		<webservicesRestVersion>2.26.0</webservicesRestVersion>
+
+		<jpmml.version>1.5.16</jpmml.version>
+		<jaxbVersion>2.3.1</jaxbVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 	</properties>
@@ -205,6 +208,7 @@
 				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
+
 			<!-- End OpenMRS modules -->
 
 			<!-- Begin OpenMRS core -->
@@ -311,6 +315,24 @@
 				<artifactId>httpclient</artifactId>
 				<version>${apacheHttpClientVersion}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-evaluator</artifactId>
+				<version>${jpmml.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jpmml</groupId>
+				<artifactId>pmml-evaluator-extension</artifactId>
+				<version>${jpmml.version}</version>
+			</dependency>
+
+			<!--<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxbVersion}</version>
+			</dependency>-->
 
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
