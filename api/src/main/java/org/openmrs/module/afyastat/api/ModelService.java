@@ -8,6 +8,7 @@ import org.jpmml.evaluator.Evaluator;
 import org.jpmml.evaluator.FieldValue;
 import org.jpmml.evaluator.InputField;
 import org.jpmml.evaluator.LoadingModelEvaluatorBuilder;
+import org.jpmml.evaluator.OutputField;
 import org.jpmml.evaluator.TargetField;
 import org.openmrs.module.afyastat.domain.ModelInputFields;
 import org.openmrs.module.afyastat.domain.ScoringResult;
@@ -57,9 +58,10 @@ public class ModelService {
 		
 		Map<FieldName, ?> evaluationResultFromEvaluator = evaluator.evaluate(prepareEvaluationArgs(evaluator, inputFields));
 		
+		List<OutputField> outputFields = evaluator.getOutputFields();
 		List<TargetField> targetFields = evaluator.getTargetFields();
 		
-		for (TargetField targetField : targetFields) {
+		for (OutputField targetField : outputFields) {
 			FieldName targetFieldName = targetField.getName();
 			Object targetFieldValue = evaluationResultFromEvaluator.get(targetField.getName());
 			
@@ -84,7 +86,7 @@ public class ModelService {
 			Object inputValue = inputFields.getFields().get(evaluatorFieldNameValue);
 			
 			if (inputValue == null) {
-				//Logger.warn("Model value not found for the following field [{}]", evaluatorFieldNameValue);
+				log.warn("Model value not found for the following field: " + evaluatorFieldNameValue);
 			}
 			
 			arguments.put(evaluatorFieldName, evaluatorField.prepare(inputValue));

@@ -129,7 +129,15 @@ public class Utils {
 		return false;
 	}
 	
-	public static ModelInputFields extractVariablesFromRequestBody(String requestBodyString) {
+	/**
+	 * Extracts model variables from request body Variable values are of float type
+	 * 
+	 * @param requestBodyString
+	 * @return
+	 */
+	public static ModelInputFields extractHTSCaseFindingVariablesFromRequestBody(String requestBodyString) {
+		
+		System.out.println("Request body: " + requestBodyString);
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode tree = null;
 		Map<String, Object> modelParams = new HashMap<String, Object>();
@@ -144,8 +152,10 @@ public class Utils {
 		while (it.hasNext()) {
 			Map.Entry<String, JsonNode> field = it.next();
 			String keyId = field.getKey();
-			String keyValue = field.getValue().getTextValue();
+			keyId = keyId.replace("_", "."); // match the variable names are expected in the model
+			int keyValue = field.getValue().getIntValue();
 			modelParams.put(keyId, keyValue);
+			System.out.println("Param Key: " + keyId + ", value: " + keyValue);
 		}
 		
 		ModelInputFields inputFields = new ModelInputFields();

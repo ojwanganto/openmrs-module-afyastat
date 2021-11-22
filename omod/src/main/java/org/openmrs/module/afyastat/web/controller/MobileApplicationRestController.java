@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * The main controller.
@@ -184,7 +185,7 @@ public class MobileApplicationRestController extends BaseRestController {
 		String requestBody = null;
 		try {
 			requestBody = Utils.fetchRequestBody(request.getReader());
-			ModelInputFields inputFields = Utils.extractVariablesFromRequestBody(requestBody);
+			ModelInputFields inputFields = Utils.extractHTSCaseFindingVariablesFromRequestBody(requestBody);
 			ScoringResult scoringResult = modelService.score("1", inputFields);
 			return scoringResult;
 		}
